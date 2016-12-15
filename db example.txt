@@ -1,0 +1,220 @@
+
+------------------------------------------------------
+------------------ MEKRAS ATHANASIOS -----------------
+--------------------- AEM  :  7074 -------------------
+---------------------- 22/1/2015 ---------------------
+------------------------------------------------------
+
+
+CREATE USER USER21 IDENTIFIED BY lets21create
+DEFAULT TABLESPACE "USERS"
+TEMPORARY TABLESPACE "TEMP";
+
+
+
+CREATE TABLE жоитгтгс 
+(
+  жоитгтгс_йыд CHAR(5) NOT NULL,
+  USER_NAME VARCHAR(25) NOT NULL,
+  AM VARCHAR2(15) NOT NULL,
+  епихето VARCHAR2(25) NOT NULL,
+  омола VARCHAR2(20) NOT NULL,
+  глея_цем DATE NOT NULL,
+  жуко CHAR(1) DEFAULT("а"), CHECK(жуко="а" or жуко="ц"),
+  диеухумсг VARCHAR2(100) NOT NULL,
+  покг VARCHAR2(20) NOT NULL,
+  тав_йыд VARCHAR2(9) NOT NULL,
+  тгк VARCHAR2(10) NOT NULL,
+  EMAIL VARCHAR2(50) NOT NULL, 
+  CONSTRAINT жоитгтгс_PK PRIMARY KEY (жоитгтгс_йыд),
+  CONSTRAINT жоитгтгс_UK1 UNIQUE (AM),
+  CONSTRAINT жоитгтгс_UK2 UNIQUE (EMAIL)
+  CONSTRAINT жоитгтгс_UK3 UNIQUE (USER_NAME)
+);
+
+
+
+CREATE TABLE тлгла 
+(
+  тлгла_йыд CHAR(5) NOT NULL,
+  тлгла_омола VARCHAR2(25) NOT NULL,
+  CONSTRAINT тлгла_PK PRIMARY KEY  (тлгла_йыд),
+  CONSTRAINT тлгла _UK1 UNIQUE (тлгла_омола)
+);
+
+
+
+
+CREATE TABLE еисгцгтгс 
+(
+  еисгцгтгс_йыд CHAR(5) NOT NULL,
+  тлгла CHAR(5) NOT NULL,
+  епихето VARCHAR2(25) NOT NULL,
+  омола VARCHAR2(50) NOT NULL,
+  хесг VARCHAR2(25) NOT NULL,
+  тгк VARCHAR2(20) NOT NULL,
+  EMAIL VARCHAR2(50) NOT NULL,
+  CONSTRAINT еисгцгтгс_PK PRIMARY KEY(еисгцгтгс_йыд),   
+  CONSTRAINT еисгцгтгс_FK1 FOREIGN KEY(тлгла) REFERENCES тлгла(тлгла_йыд)
+  CONSTRAINT еисгцгтгс_UK1 UNIQUE (EMAIL)
+);
+
+
+
+
+CREATE TABLE еисгцгтгс_тлгла 
+(
+  еисгцгтгс CHAR(5) NOT NULL,
+  тлгла CHAR(5) NOT NULL,
+  CONSTRAINT еисгцгтгс_тлгла_FK1 FOREIGN KEY(еисгцгтгс) REFERENCES еисгцгтгс(еисгцгтгс_йыд),
+  CONSTRAINT еисгцгтгс_тлгла_FK2 FOREIGN KEY(тлгла) REFERENCES тлгла(тлгла_йыд)
+);
+
+
+
+CREATE TABLE лахгла 
+(
+  лахгла_йыд CHAR(5) NOT NULL,
+  титкос CHAR(60) NOT NULL,
+  пеяицяажг VARCHAR2(200) NOT NULL,
+  тлгла VARCHAR2(20) NOT NULL,
+  CONSTRAINT лахгла_PK PRIMARY KEY (лахгла_йыд),
+  CONSTRAINT лахгла_FK1 FOREIGN KEY(тлгла) REFERENCES тлгла(тлгла_йыд),
+  CONSTRAINT лахгла_UK1 UNIQUE (титкос)
+);
+
+
+
+CREATE TABLE пяоцяалла 
+(
+  пяоцяалла_йыд CHAR(5) NOT NULL,
+  пеяицяажг VARCHAR2(200) NOT NULL,
+  глеяа CHAR(9) NOT NULL, CHECK(глеяа="деутеяа" or глеяа="тяитг" or глеяа="тетаятг" or глеяа="пелптг" or глеяа="паяасйеуг"),
+  емаянг DATE NOT NULL,
+  диаяйеиа NUMBER NOT NULL,
+  CONSTRAINT пяоцяалла_PK PRIMARY KEY (пяоцяалла_йыд)
+);
+
+
+
+CREATE TABLE йтияио
+(
+  йтияио_йыд CHAR(5) NOT NULL,
+  йтияио_омол VARCHAR2(25) NOT NULL,
+  пеяицяажг VARCHAR2(200) NOT NULL,
+  CONSTRAINT йтияио_PK PRIMARY KEY (йтияио_йыд)
+);
+
+
+
+CREATE TABLE аихоуса 
+(
+  аихоуса_йыд CHAR(5) NOT NULL,
+  пеяицяажг VARCHAR2(25) NOT NULL,
+  пяоцяалла CHAR(5) NOT NULL,
+  топохесиа CHAR(5) NOT NULL,
+  аияхл_жоитгтым VARCHAR2(2) NOT NULL,
+  CONSTRAINT аихоуса_PK PRIMARY KEY (аихоуса_йыд),
+  CONSTRAINT аихоуса_FK1 FOREIGN KEY(пяоцяалла) REFERENCES пяоцяалла(пяоцяалла_йыд),
+  CONSTRAINT аихоуса_FK2 FOREIGN KEY(топохесиа) REFERENCES топохесиа(йтияио_йыд)  
+);
+
+
+
+
+CREATE TABLE топохесиа_аих 
+(
+  йтияио CHAR(5) NOT NULL,
+  аихоуса CHAR(5) NOT NULL,
+  CONSTRAINT топохесиа_аих_FK1 FOREIGN KEY(йтияио) REFERENCES йтияио(йтияио_йыд),
+  CONSTRAINT топохесиа_аих_FK2 FOREIGN KEY(аихоуса) REFERENCES аихоуса(аихоуса_йыд)
+);
+
+
+CREATE TABLE танг 
+(
+  танг_йыд CHAR(5) NOT NULL,
+  тлгла CHAR(5) NOT NULL, 
+  пяоцяалла CHAR(5) NOT NULL, 
+  еисгцгтгс CHAR(5) NOT NULL, 
+  лахгла CHAR(5) NOT NULL,	
+  еналгмо VARCHAR2(9) NOT NULL,	CHECK (еналгмо="еаяимо" OR еналгмо="веилеяимо"),
+  свок_вяомиа INT NOT NULL,CHECK (свок_вяомиа BETWEEN 2010 AND 2050),
+  CONSTRAINT танг_PK PRIMARY KEY (танг_йыд),
+  CONSTRAINT танг_FK1 FOREIGN KEY(тлгла) REFERENCES тлгла(тлгла_йыд),
+  CONSTRAINT танг_FK2 FOREIGN KEY(пяоцяалла) REFERENCES пяоцяалла(пяоцяалла_йыд),
+  CONSTRAINT танг_FK3 FOREIGN KEY(еисгцгтгс) REFERENCES еисгцгтгс(еисгцгтгс_йыд),
+  CONSTRAINT танг_FK4 FOREIGN KEY(лахгла) REFERENCES лахгла(лахгла_йыд)  
+);
+
+
+CREATE TABLE бахлокоциа 
+(
+  бахлокоциа_йыд CHAR(5) NOT NULL,
+  жоитгтгс CHAR(5) NOT NULL,  
+  лахгла CHAR(5) NOT NULL,  
+  бахлос VARCHAR2(2) DEFAULT 0, CHECK(бахлос BETWEEN 0 AND 10);
+  глеяол_бахлок DATE NOT NULL,
+  CONSTRAINT бахлокоциа_PK PRIMARY KEY (бахлокоциа_йыд),
+  CONSTRAINT бахлокоциа_FK1 FOREIGN KEY(лахгла) REFERENCES лахгла(лахгла_йыд),
+  CONSTRAINT бахлокоциа_FK2 FOREIGN KEY(жоитгтгс) REFERENCES жоитгтгс(жоитгтгс_йыд)
+);
+
+
+CREATE USER foititisXX IDENTIFIED BY foit29
+DEFAULT TABLESPACE "USERS"
+TEMPORARY TABLESPACE "TEMP";
+
+
+CREATE USER ypeuth_gram IDENTIFIED BY ypgram29 
+DEFAULT TABLESPACE "USERS"
+TEMPORARY TABLESPACE "TEMP";
+
+
+CREATE USER ypeuth_tmim IDENTIFIED BY yptmim29 
+DEFAULT TABLESPACE "USERS"
+TEMPORARY TABLESPACE "TEMP";
+
+
+create role student;
+grant select on лахгла to student;
+grant select on пяоцяалла to student;
+grant select on топохесиа_аих to student;
+grant select on еисгцгтгс_тлгла  to student;
+grant student to foititisXX;
+
+
+create view stoixeia_student as select * from жоитгтгс where USER_NAME="fotitisXX";
+grant select on stoixeia_student to fotitisXX;
+
+create view vathm_student as select * from бахлокоциа where жоитгтгс="fotitisXX";
+grant select on vathm_student to fotitisXX;
+
+
+create role ypeuthinosgram;
+grant select on тлгла to ypeuthinosgram;
+grant select on еисгцгтгс  to ypeuthinosgram;
+grant select on еисгцгтгс_тлгла  to ypeuthinosgram;
+grant select on лахгла to ypeuthinosgram;
+grant select on пяоцяалла to ypeuthinosgram;
+grant select on аихоуса  to ypeuthinosgram;
+grant select on топохесиа_аих to ypeuthinosgram;
+grant select on танг to ypeuthinosgram;
+grant select on йтияио to ypeuthinosgram;
+grant select,insert,update,delete on жоитгтгс to ypeuthinosgram;
+grant select,insert,update,delete on бахлокоциа to ypeuthinosgram;
+grant ypeuthinosgram to ypeuth_gram;
+
+
+
+create role ypeuthinosprog;
+grant select,insert,update,delete on лахгла to ypeuthinosprog;
+grant select,insert,update,delete on тлгла to ypeuthinosprog;
+grant select,insert,update,delete on еисгцгтгс to ypeuthinosprog;
+grant select,insert,update,delete on еисгцгтгс_тлгла to ypeuthinosprog;
+grant select,insert,update,delete on пяоцяалла to ypeuthinosprog;
+grant select,insert,update,delete on танг to ypeuthinosprog;
+grant select,insert,update,delete on йтияио to ypeuthinosprog;
+grant select,insert,update,delete on аихоуса to ypeuthinosprog;
+grant select,insert,update,delete on топохесиа_аих to ypeuthinosprog;
+grant ypeuthinosprog to ypeuth_tmim;
